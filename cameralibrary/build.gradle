@@ -7,7 +7,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -37,7 +37,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-//    implementation project(':facedetectlibrary')
+    implementation project(':facedetectlibrary')
     implementation project(':filterlibrary')
     implementation project(':landmarklibrary')
     implementation project(':utilslibrary')

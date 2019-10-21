@@ -19,8 +19,8 @@ import com.cgfay.camera.engine.recorder.PreviewRecorder;
 import com.cgfay.camera.engine.render.PreviewRenderer;
 import com.cgfay.camera.fragment.CameraPreviewFragment;
 import com.cgfay.camera.utils.PathConstraints;
-//import com.cgfay.facedetect.engine.FaceTracker;
-//import com.cgfay.facedetect.listener.FaceTrackerCallback;
+import com.cgfay.facedetect.engine.FaceTracker;
+import com.cgfay.facedetect.listener.FaceTrackerCallback;
 import com.cgfay.filter.glfilter.color.bean.DynamicColor;
 import com.cgfay.filter.glfilter.makeup.bean.DynamicMakeup;
 import com.cgfay.filter.glfilter.resource.FilterHelper;
@@ -43,7 +43,7 @@ import java.nio.ByteBuffer;
  * @date 2019/7/3
  */
 public class CameraPreviewPresenter extends PreviewPresenter<CameraPreviewFragment>
-        implements OnRecordListener, OnCameraCallback,  OnCaptureListener, OnFpsListener {
+        implements OnRecordListener, OnCameraCallback, FaceTrackerCallback, OnCaptureListener, OnFpsListener {
 
     private static final String TAG = "CameraPreviewPresenter";
 
@@ -80,18 +80,18 @@ public class CameraPreviewPresenter extends PreviewPresenter<CameraPreviewFragme
                 .setFpsCallback(this)
                 .initRenderer(mActivity);
 
-//        // 初始化检测器
-//        FaceTracker.getInstance()
-//                .setFaceCallback(this)
-//                .previewTrack(true)
-//                .initTracker();
+        // 初始化检测器
+        FaceTracker.getInstance()
+                .setFaceCallback(this)
+                .previewTrack(true)
+                .initTracker();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        // 销毁人脸检测器
-//        FaceTracker.getInstance().destroyTracker();
+        // 销毁人脸检测器
+        FaceTracker.getInstance().destroyTracker();
         // 关闭渲染引擎
         PreviewRenderer.getInstance().destroyRenderer();
         // 清理关键点
@@ -142,10 +142,10 @@ public class CameraPreviewPresenter extends PreviewPresenter<CameraPreviewFragme
         if (getTarget() != null) {
             getTarget().enableShutter(true);
         }
-//        FaceTracker.getInstance()
-//                .setBackCamera(mCameraParam.backCamera)
-//                .prepareFaceTracker(mActivity, mCameraParam.orientation,
-//                        mCameraParam.previewWidth, mCameraParam.previewHeight);
+        FaceTracker.getInstance()
+                .setBackCamera(mCameraParam.backCamera)
+                .prepareFaceTracker(mActivity, mCameraParam.orientation,
+                        mCameraParam.previewWidth, mCameraParam.previewHeight);
     }
 
     /**
@@ -157,18 +157,18 @@ public class CameraPreviewPresenter extends PreviewPresenter<CameraPreviewFragme
         if (getTarget() != null) {
             getTarget().enableShutter(true);
         }
-//        // 人脸检测
-//        FaceTracker.getInstance().trackFace(data,
-//                mCameraParam.previewWidth, mCameraParam.previewHeight);
+        // 人脸检测
+        FaceTracker.getInstance().trackFace(data,
+                mCameraParam.previewWidth, mCameraParam.previewHeight);
     }
 
-//    /**
-//     * 人脸检测完成回调
-//     */
-//    @Override
-//    public void onTrackingFinish() {
-//        PreviewRenderer.getInstance().requestRender();
-//    }
+    /**
+     * 人脸检测完成回调
+     */
+    @Override
+    public void onTrackingFinish() {
+        PreviewRenderer.getInstance().requestRender();
+    }
 
     /**
      * 截屏回调
